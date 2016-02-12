@@ -6,7 +6,7 @@ mesh = Mesh("Triangle_corner_nice.xml")
 #plot(mesh) ;interactive()
 
 NS_parameters.update(
-	nu = 1.0/200.0,
+	nu = 1.0/100.0,
 	#use_krylov_solver = False,
     max_error = 1e-13,
     max_iter = 100,
