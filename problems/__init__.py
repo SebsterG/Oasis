@@ -9,7 +9,7 @@ from os import getpid, path
 from collections import defaultdict
 from numpy import array, maximum, zeros
 
-#UnitSquareMesh(20, 20) # Just due to MPI bug on Scinet
+UnitSquareMesh(20, 20) # Just due to MPI bug on Scinet
 
 try:
     from fenicstools import getMemoryUsage
@@ -29,7 +29,7 @@ parameters["form_compiler"]["cpp_optimize"] = True
 parameters["form_compiler"]["representation"] = "quadrature"
 #parameters["form_compiler"]["quadrature_degree"] = 4
 #parameters["form_compiler"]["cache_dir"] = "instant"
-parameters["form_compiler"]["cpp_optimize_flags"] = "-O3 --fast-math"
+parameters["form_compiler"]["cpp_optimize_flags"] = "-O3"
 parameters["mesh_partitioner"] = "ParMETIS"
 parameters["form_compiler"].add("no_ferari", True)
 #parameters["ghost_mode"] = "shared_vertex"

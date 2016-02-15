@@ -48,6 +48,7 @@ if element == 'TaylorHood':
     # Should assert that degree['p'] = degree['u']-1 ??
     
 # Declare FunctionSpaces and arguments
+#from IPython import embed; embed()
 V = VectorFunctionSpace(mesh, family['u'], degree['u'], constrained_domain=constrained_domain)
 Q = FunctionSpace(mesh, family['p'], degree['p'], constrained_domain=constrained_domain)
 

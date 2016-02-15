@@ -2,7 +2,7 @@ from dolfin import *
 from ..NSfracStep import *
 
 #mesh = UnitSquareMesh(20,20)
-mesh = Mesh("Triangle_flat.xml")
+mesh = Mesh("Triangle_corner_nice.xml")
 
 
 NS_parameters.update(
