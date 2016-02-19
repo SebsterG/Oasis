@@ -7,14 +7,14 @@
         <DataItem Format="XML" Dimensions="1"> 0</DataItem>
       </Time>
       <Grid Name="grid_1" GridType="Uniform">
-        <Topology NumberOfElements="3476" TopologyType="Triangle">
-          <DataItem Format="HDF" Dimensions="3476 3">Stream.h5:/Mesh/0/topology</DataItem>
+        <Topology NumberOfElements="90980" TopologyType="Triangle">
+          <DataItem Format="HDF" Dimensions="90980 3">Stream.h5:/Mesh/0/topology</DataItem>
         </Topology>
         <Geometry GeometryType="XY">
-          <DataItem Format="HDF" Dimensions="1847 2">Stream.h5:/Mesh/0/coordinates</DataItem>
+          <DataItem Format="HDF" Dimensions="46051 2">Stream.h5:/Mesh/0/coordinates</DataItem>
         </Geometry>
         <Attribute Name="f_60" AttributeType="Scalar" Center="Node">
-          <DataItem Format="HDF" Dimensions="1847 1">Stream.h5:/VisualisationVector/0</DataItem>
+          <DataItem Format="HDF" Dimensions="46051 1">Stream.h5:/VisualisationVector/0</DataItem>
         </Attribute>
       </Grid>
     </Grid>

@@ -6,7 +6,8 @@ mesh = Mesh("Triangle_corner_nice.xml")
 #plot(mesh) ;interactive()
 
 NS_parameters.update(
-	nu = 1.0/200.0,
+    omega = 0.8,
+	nu = 1.0/500,
 	#use_krylov_solver = False,
     max_error = 1e-13,
     max_iter = 100,
@@ -58,13 +59,14 @@ def theend_hook(u_, p_,V, VQ, Q, p, q, **kw):
     bc0 = DirichletBC(V, (0, 0), nos)
     bc1 = DirichletBC(V, (1.0, 0), top)
     uu = project(u_, V, bcs=[bc0,bc1])
-    plot(uu)
+    #plot(uu)
     interactive()
     psi = Function(Q)
     p = TrialFunction(Q)
     q = TestFunction(Q)
     solve(inner(grad(p), grad(q))*dx == inner(curl(u_), q)*dx, psi, bcs=[DirichletBC(Q, 0, "on_boundary")])
     pa = psi.vector().array().argmin()
+    # argsort 
     xx = interpolate(Expression("x[0]"), Q)
     yy = interpolate(Expression("x[1]"), Q)
     xm = xx.vector()[pa]
@@ -75,7 +77,7 @@ def theend_hook(u_, p_,V, VQ, Q, p, q, **kw):
     v_value = mycurl(xm,ym)
     print "Vorticity value at eddy: %.4f "%(v_value)
 
-    #plot(psi, title='Streamfunction', interactive=True)
+    plot(psi, title='Streamfunction', interactive=True)
     #plot(mycurl, title='Vorticity', interactive=True)
     file = File("Stream.xdmf");
     file << psi;
