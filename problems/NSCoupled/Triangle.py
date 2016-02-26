@@ -6,11 +6,11 @@ mesh = Mesh("Triangle_corner_nice.xml")
 #plot(mesh) ;interactive()
 
 NS_parameters.update(
-    omega = 0.8,
-	nu = 1.0/500,
+    omega = 0.1,
+	nu = 1.0/1000.0,
 	#use_krylov_solver = False,
     max_error = 1e-13,
-    max_iter = 100,
+    max_iter = 400,
     plot_interval = 10,
     output_timeseries_as_vector = True)
 
@@ -20,7 +20,7 @@ class Top(SubDomain):
 
 class Nos(SubDomain):
 	def inside(self,x,on_boundary):
-		return on_boundary and not near(x[1],1.0)
+		return on_boundary and not near(x[1], 1.0)
 
 top = Top()
 nos = Nos()
@@ -66,16 +66,30 @@ def theend_hook(u_, p_,V, VQ, Q, p, q, **kw):
     q = TestFunction(Q)
     solve(inner(grad(p), grad(q))*dx == inner(curl(u_), q)*dx, psi, bcs=[DirichletBC(Q, 0, "on_boundary")])
     pa = psi.vector().array().argmin()
-    # argsort 
+    sort = psi.vector().array().argsort()
+    print pa,"--",sort[0], sort[1]
     xx = interpolate(Expression("x[0]"), Q)
     yy = interpolate(Expression("x[1]"), Q)
-    xm = xx.vector()[pa]
-    ym = yy.vector()[pa]
-    print "Center eddy: x: %.4f, y: %.4f " %(xm, ym)
-    print "Stream function value at eddy: %.4f " %(psi(xm,ym))
+    xm_1 = xx.vector()[sort[0]]
+    ym_1 = yy.vector()[sort[0]]
+    xm_2 = xx.vector()[sort[-1]]
+    ym_2 = yy.vector()[sort[-1]]
+    print "Center main-eddy: x: %.4f, %.4f " %(xm_1, ym_1)
+    print "Stream function value at main-eddy: %.4f " %(psi(xm_1,ym_1))
     mycurl = project(curl(u_), Q, bcs=[DirichletBC(Q, 0, "on_boundary")])
-    v_value = mycurl(xm,ym)
-    print "Vorticity value at eddy: %.4f "%(v_value)
+    v_value = mycurl(xm_1,ym_1)
+    print "Vorticity value at main-eddy: %.4f "%(v_value)
+    
+    print "-----------Here comes second eddy:------------"
+
+    print "Center second-eddy: x: %.4f, %.4f " %(xm_2, ym_2)
+    print "Stream function value at second-eddy: %.4f " %(psi(xm_2,ym_2))
+    v_value = mycurl(xm_2,ym_2)
+    print "Vorticity value at second-eddy: %.4f "%(v_value)
+    
+
+
+
 
     plot(psi, title='Streamfunction', interactive=True)
     #plot(mycurl, title='Vorticity', interactive=True)

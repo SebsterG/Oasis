@@ -1,0 +1,71 @@
+\documentclass[a4paper,norsk]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel,textcomp,listings, subfigure,graphicx}
+                                    
+\title{Triangle Cavity Flow}
+\author{Sebastian Gjertsen}
+\begin{document}
+\maketitle
+
+
+\section*{Results)}
+First I considered an equilateral Triangle with corner points: \newline
+a = (-$\sqrt(3)$, 1), b = ($\sqrt(3)$, 1) ,c = (0, -2) \newline
+\newline
+Where the Reynolds number is defined as $Re = \frac{U}{\mu} $, where i set $U=1$ and controlled Re by changing $\mu$
+\newline
+This study was done with 73541 vertices and 145664 cells
+\newline
+\begin{tabular}{l*{6}{c}r}
+   & &Erturk and Gockol & & & Me\\
+  Re & $\psi$ & $\omega$ &(x,y) & $\psi$ & $\omega$ & (x,y)  \\
+  1   &   -0.2329  &-1.3788  & (0.0101, 04668) &-0.2329 & -1.3658  & (0.0109, 0.4617)  \\
+  50   &  -0.2369 & -1.4689 & (0.3484, 04434)  & -0.2367 &-1.4708 & (0.3525, 0.4467)    \\
+  100  & -0.2482 & -1.3669 & (0.3315, 0.3555)   & -0.2476 & -1.3599 &(0.3339, 0.3576)  \\
+  200   & -0.2624 &-1.2518  & (0.2030, 0.2734)  & -0.2613 & -1.2459 & (0.1978, 0.2758 ) \\
+  350   & -0.2724 & -1.1985 & (0.1556, 0.2383) &-0.2708 & -1.1887 & (0.1605, 0.2412)   \\
+  500   & -0.2774 & -1.1791 &  (0.1319, 0.2207)  & -0.2754 &  -1.1666 & ( 0.1395, 0.2237)       \\
+  750   &  -0.2818 & -1.1668 &  (0.1150, 0.2031) & -0.2793  & -1.1504  & (0.1160, 0.2056 ) \\
+  1000   & -0.2844 & -1.1629 &(0.1116, 0.1973)  \\
+  1250   & -0.2861 & -1.1624 & (0.1049, 0.1973)  \\
+  1500   & -0.2872 & -1.1639 & (0.1015, 0.1914)  \\
+  1750   &  -0.2881 & -1.1675 & (0.1015, 0.1914) \\ 
+\hline
+\end{tabular}
+\newline
+\newline
+\newline 
+Next I considered an Isoceles Triangle with corner points: \newline
+a = (-1, 0), b = (1, 0) ,c = (0, -4) \newline
+\newline
+In this table we also looked at the position and value of the center-eddy:
+\newline
+\begin{tabular}{l*{6}{c}r}
+   & Erturk and Gockol & Me\\
+  Re &(x,y) & (x,y)  \\
+12.5 & (0.059, -0.391) & (0.0587, -0.4001 )\\
+25 & (0.115,-0.398) &  (0.1101, -0.3999 )\\
+100 & (0.213, -0.477)& (0.2124, -0.4767 ) \\
+200 & (0.129, -0.563)& (0.1275, -0.5608 )\\  
+\hline
+\end{tabular}
+The next thing i looked at was where the second eddy was. This eddy is spinning the opposite direction so i had to look for the highest value of the stream function:
+\begin{tabular}{l*{6}{c}r}
+   & Me\\
+  Re & $\psi$ & $\omega$& (x,y)   \\
+12.5 & 0.0002 & 0.0108 & (-0.0018, -2.1924)\\
+100 & 0.0020 & 0.0699  & (0.0490, -1.8199)\\
+200 &  0.0073 & 0.2183 & (-0.0237, -1.6809)\\
+\hline
+\end{tabular}
+
+
+
+
+
+
+
+
+
+\end{document}
