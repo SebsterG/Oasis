@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.2.23)  2 MAR 2016 10:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.2.23)  2 MAR 2016 14:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -215,6 +215,9 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 
 LaTeX Warning: Label `fig:awesome_image' multiply defined.
 
+
+LaTeX Warning: Label `fig:awesome_image' multiply defined.
+
 )
 \openout1 = `Triangle.aux'.
 
@@ -306,103 +309,122 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 9.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 20.
+(Font)              <7> on input line 17.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 20.
+(Font)              <5> on input line 17.
 
-<Equilateral_Re_100.png, id=1, 794.97pt x 540.0175pt>
-File: Equilateral_Re_100.png Graphic file (type png)
-
-<use Equilateral_Re_100.png>
-Package pdftex.def Info: Equilateral_Re_100.png used on input line 23.
-(pdftex.def)             Requested size: 261.07788pt x 216.00316pt.
-
-Overfull \hbox (76.68144pt too wide) in paragraph at lines 19--56
-[] 
+Overfull \hbox (62.9035pt too wide) in paragraph at lines 27--28
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 19--56
-
+Overfull \hbox (2.9177pt too wide) in paragraph at lines 37--38
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 19--56
-
+Overfull \hbox (80.89925pt too wide) in paragraph at lines 38--39
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 19--56
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 19--56
-
+Overfull \hbox (92.89641pt too wide) in paragraph at lines 39--40
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 [1
 
 {/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<isoceles_Re_100.png, id=16, 919.435pt x 540.0175pt>
+<Equilateral_Re_100.png, id=15, 794.97pt x 540.0175pt>
+File: Equilateral_Re_100.png Graphic file (type png)
+
+<use Equilateral_Re_100.png>
+Package pdftex.def Info: Equilateral_Re_100.png used on input line 50.
+(pdftex.def)             Requested size: 261.07788pt x 216.00316pt.
+
+Overfull \hbox (76.68144pt too wide) in paragraph at lines 64--81
+ [][] 
+ []
+
+<isoceles_Re_100.png, id=17, 919.435pt x 540.0175pt>
 File: isoceles_Re_100.png Graphic file (type png)
  <use isoceles_Re_100.png>
-Package pdftex.def Info: isoceles_Re_100.png used on input line 59.
+Package pdftex.def Info: isoceles_Re_100.png used on input line 91.
 (pdftex.def)             Requested size: 140.14948pt x 216.00316pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 63--92
+<isoceles_Re_200.png, id=19, 919.435pt x 540.0175pt>
+File: isoceles_Re_200.png Graphic file (type png)
+ <use isoceles_Re_200.png>
+Package pdftex.def Info: isoceles_Re_200.png used on input line 93.
+(pdftex.def)             Requested size: 140.14948pt x 216.00316pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 114--132
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 63--92
-
- []
-
-[2 <./Equilateral_Re_100.png (PNG copy)>]
-<eddy_plot_1.png, id=22, 578.16pt x 433.62pt>
+[2 <./Equilateral_Re_100.png (PNG copy)>] [3] [4 <./isoceles_Re_100.png (PNG co
+py)> <./isoceles_Re_200.png (PNG copy)>]
+<eddy_plot_1.png, id=35, 578.16pt x 433.62pt>
 File: eddy_plot_1.png Graphic file (type png)
  <use eddy_plot_1.png>
-Package pdftex.def Info: eddy_plot_1.png used on input line 93.
+Package pdftex.def Info: eddy_plot_1.png used on input line 139.
 (pdftex.def)             Requested size: 231.2599pt x 173.44492pt.
 
-<eddy_plot_2.png, id=25, 578.16pt x 433.62pt>
+<eddy_plot_2.png, id=38, 578.16pt x 433.62pt>
 File: eddy_plot_2.png Graphic file (type png)
  <use eddy_plot_2.png>
-Package pdftex.def Info: eddy_plot_2.png used on input line 94.
+Package pdftex.def Info: eddy_plot_2.png used on input line 141.
 (pdftex.def)             Requested size: 231.2599pt x 173.44492pt.
 
-Overfull \hbox (134.74149pt too wide) in paragraph at lines 93--95
-[][] [] 
+<Spectral_eddy_plot.png, id=40, 1284.8pt x 803.0pt>
+File: Spectral_eddy_plot.png Graphic file (type png)
+
+<use Spectral_eddy_plot.png>
+Package pdftex.def Info: Spectral_eddy_plot.png used on input line 143.
+(pdftex.def)             Requested size: 445.6255pt x 230.14711pt.
+
+Overfull \hbox (100.6255pt too wide) in paragraph at lines 143--144
+ [][] 
  []
 
-[3 <./isoceles_Re_100.png (PNG copy)> <./eddy_plot_1.png> <./eddy_plot_2.png>]
+
+LaTeX Warning: Float too large for page by 53.42427pt on input line 146.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 133--148
+
+ []
+
+[5] [6 <./eddy_plot_1.png> <./eddy_plot_2.png> <./Spectral_eddy_plot.png>]
 (./Triangle.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 4161 strings out of 493089
- 58161 string characters out of 6134842
- 122258 words of memory out of 5000000
- 7600 multiletter control sequences out of 15000+600000
- 10214 words of font info for 28 fonts, out of 8000000 for 9000
+ 4435 strings out of 493089
+ 60445 string characters out of 6134842
+ 134282 words of memory out of 5000000
+ 7871 multiletter control sequences out of 15000+600000
+ 10549 words of font info for 29 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,7n,32p,715b,243s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
+ 37i,9n,32p,715b,1541s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
+}{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}<
 /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
 usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></us
 r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
-local/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/lo
-cal/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/loca
-l/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/
-texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb>
-Output written on Triangle.pdf (3 pages, 299583 bytes).
+local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/loc
+al/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loca
+l/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/
+texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/te
+xlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texl
+ive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texliv
+e/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb>
+Output written on Triangle.pdf (6 pages, 1133329 bytes).
 PDF statistics:
- 62 PDF objects out of 1000 (max. 8388607)
- 38 compressed objects within 1 object stream
+ 89 PDF objects out of 1000 (max. 8388607)
+ 55 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 45 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 67 words of extra memory for PDF output out of 10000 (max. 10000000)
 

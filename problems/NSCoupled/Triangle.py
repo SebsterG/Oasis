@@ -2,27 +2,27 @@ from dolfin import *
 from ..NSCoupled import *
 import numpy as np
 import matplotlib.pyplot as plt
-mesh = Mesh("Triangle_corner_nice.xml")
+mesh = Mesh("Triangle_isoceles.xml")
 
 
 #plot(mesh) ;interactive()
 
 NS_parameters.update(
-    omega = 0.1,
-	nu = 1.0/1750.0,
+    omega = 1.0,
+	nu = 1.0/200.0,
 	#use_krylov_solver = False,
     max_error = 1e-13,
-    max_iter = 400,
+    max_iter = 100,
     plot_interval = 10,
     output_timeseries_as_vector = True)
 
 class Top(SubDomain):
 	def inside(self, x, on_boundary):
-		return near(x[1], 1.0)
+		return near(x[1], 0.0)
 
 class Nos(SubDomain):
 	def inside(self,x,on_boundary):
-		return on_boundary and not near(x[1], 1.0)
+		return on_boundary and not near(x[1], 0.0)
 
 top = Top()
 nos = Nos()
@@ -70,12 +70,13 @@ def theend_hook(u_, p_,V, VQ, Q, p, q, **kw):
         val_2[i] = abs(u_[0](array([0.0,x_2[i]])))
     #print val
 
-    plt.plot(x_1,val_1); plt.yscale('log');plt.ylim((1e-28,1.0));plt.gca().invert_xaxis();plt.grid() ;plt.show()
-    plt.plot(x_2,val_2); plt.yscale('log');plt.ylim((1e-28,1e-8));plt.gca().invert_xaxis();plt.grid(); plt.show()
-    """
-    #dx = -4/101
-    #print abs(u_[0](array([0.0,-4.0])))
-    """
+    plt.plot(x_1,val_1); plt.yscale('log');plt.ylim((1e-28,1.0));\
+    plt.gca().invert_xaxis();plt.grid();plt.xlabel("Distance down centre-line ");plt.ylabel("Absolute transverse velocity") ;plt.show()
+    plt.plot(x_2,val_2); plt.yscale('log');plt.ylim((1e-28,1e-8));\
+    plt.gca().invert_xaxis();plt.grid();plt.xlabel("Distance down centre-line ");plt.ylabel("Absolute transverse velocity"); plt.show()
+
+
+
     from pylab import *
     import matplotlib.pyplot  as pyplot
     a = [ pow(10,i) for i in range(10) ]
@@ -120,42 +121,5 @@ def theend_hook(u_, p_,V, VQ, Q, p, q, **kw):
 
     plot(psi, title='Streamfunction', interactive=True)
     #plot(mycurl, title='Vorticity', interactive=True)
-    file = File("Velocity.xdmf");
-    file << uu;
-
-"""
-def initialize(x_1, x_2, bcs, **NS_namespace):
-    for ui in x_1:
-        [bc.apply(x_1[ui]) for bc in bcs[ui]]
-    for ui in x_2:
-        [bc.apply(x_2[ui]) for bc in bcs[ui]]
-
-def pre_solve_hook(mesh, velocity_degree, **NS_namespace):
-    Vv = VectorFunctionSpace(mesh, 'CG', velocity_degree)
-    return dict(uv=Function(Vv))
-
-def temporal_hook(q_, tstep, u_, uv, p_, plot_interval, **NS_namespace):
-    if tstep % plot_interval == 0:
-        assign(uv.sub(0), u_[0])
-        assign(uv.sub(1), u_[1])
-        plot(uv, title='Velocity')
-        plot(p_, title='Pressure')
-
-def theend_hook(p, q, u_, p_, uv, mesh, **NS_namespace):
-    assign(uv.sub(0), u_[0])
-    assign(uv.sub(1), u_[1])
-    plot(uv, title='Velocity')
-    plot(p_, title='Pressure')
-
-    try:
-        #from fenicstools import StreamFunction
-        #psi = StreamFunction(uv, [], mesh, use_strong_bc=True)
-        psi = Function(Q)
-        solve(inner(grad(p), grad(q))*dx == inner(curl(u_), q)*dx, psi, bcs=[DirichletBC(Q, 0, "on_boundary")])
-        plot(psi, title='Streamfunction', interactive=True)
-
-        f = File("psi.xdmf")
-        f << psi
-    except:
-        pass
-"""
+    file = File("Psi_200.xdmf");
+    file << psi;
