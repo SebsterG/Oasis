@@ -14,7 +14,7 @@ UnitSquareMesh(20, 20) # Just due to MPI bug on Scinet
 try:
     from fenicstools import getMemoryUsage
 
-except:    
+except:
     def getMemoryUsage(rss=True):
         mypid = getpid()
         if rss:
@@ -38,7 +38,7 @@ parameters["form_compiler"].add("no_ferari", True)
 # Default parameters for all solvers
 NS_parameters = dict(
   nu = 0.01,             # Kinematic viscosity
-  folder = 'results',    # Relative folder for storing results 
+  folder = 'results',    # Relative folder for storing results
   velocity_degree = 2,   # default velocity degree
   pressure_degree = 1    # default pressure degree
   )
@@ -58,7 +58,7 @@ Scalar = defaultdict(lambda: dict(Schmidt=1.0,
                                   degree=1))
 
 # The following helper functions are available in dolfin
-# They are redefined here for printing only on process 0. 
+# They are redefined here for printing only on process 0.
 RED   = "\033[1;37;31m%s\033[0m"
 BLUE  = "\033[1;37;34m%s\033[0m"
 GREEN = "\033[1;37;32m%s\033[0m"
@@ -70,7 +70,7 @@ def info_blue(s, check=True):
 def info_green(s, check=True):
     if MPI.rank(mpi_comm_world())==0 and check:
         print GREEN % s
-    
+
 def info_red(s, check=True):
     if MPI.rank(mpi_comm_world())==0 and check:
         print RED % s
@@ -79,20 +79,20 @@ class OasisTimer(Timer):
     def __init__(self, task, verbose=False):
         Timer.__init__(self, task)
         info_blue(task, verbose)
-        
+
 class OasisMemoryUsage:
     def __init__(self, s):
         self.memory = 0
         self.memory_vm = 0
         self(s)
-        
+
     def __call__(self, s, verbose=False):
         self.prev = self.memory
         self.prev_vm = self.memory_vm
         self.memory = MPI.sum(mpi_comm_world(), getMemoryUsage())
         self.memory_vm = MPI.sum(mpi_comm_world(), getMemoryUsage(False))
         if MPI.rank(mpi_comm_world()) == 0 and verbose:
-            info_blue('{0:26s}  {1:10d} MB {2:10d} MB {3:10d} MB {4:10d} MB'.format(s, 
+            info_blue('{0:26s}  {1:10d} MB {2:10d} MB {3:10d} MB {4:10d} MB'.format(s,
                    self.memory-self.prev, self.memory, self.memory_vm-self.prev_vm, self.memory_vm))
 
 # Print memory use up til now
@@ -127,8 +127,8 @@ def recursive_update(dst, src):
 def add_function_to_tstepfiles(function, newfolder, tstepfiles, tstep):
     name = function.name()
     tstepfolder = path.join(newfolder, "Timeseries")
-    tstepfiles[name] = XDMFFile(mpi_comm_world(), 
-                                path.join(tstepfolder, 
+    tstepfiles[name] = XDMFFile(mpi_comm_world(),
+                                path.join(tstepfolder,
                                 '{}_from_tstep_{}.xdmf'.format(name, tstep)))
     tstepfiles[name].function = function
     tstepfiles[name].parameters["rewrite_function_mesh"] = False
@@ -151,7 +151,7 @@ def scalar_hook(**NS_namespace):
 
 def scalar_source(scalar_components, **NS_namespace):
     """Return a dictionary of scalar sources."""
-    return dict((ci, Constant(0)) for ci in scalar_components)    
+    return dict((ci, Constant(0)) for ci in scalar_components)
 
 def pre_solve_hook(**NS_namespace):
     """Called just prior to entering time-loop. Must return a dictionary."""
@@ -161,11 +161,11 @@ def theend_hook(**NS_namespace):
     """Called at the very end."""
     pass
 
-def post_import_problem(NS_parameters, mesh, commandline_kwargs, 
+def post_import_problem(NS_parameters, mesh, commandline_kwargs,
                         **NS_namespace):
-    """Called after importing from problem."""   
-    
-    # Update NS_parameters with all parameters modified through command line 
+    """Called after importing from problem."""
+
+    # Update NS_parameters with all parameters modified through command line
     for key, val in commandline_kwargs.iteritems():
         if isinstance(val, dict):
             NS_parameters[key].update(val)
@@ -176,8 +176,8 @@ def post_import_problem(NS_parameters, mesh, commandline_kwargs,
     if callable(mesh):
         mesh = mesh(**NS_parameters)
 
-    assert(isinstance(mesh, Mesh)) 
-    
+    assert(isinstance(mesh, Mesh))
+
     # Returned dictionary to be updated in the NS namespace
     d = dict(mesh=mesh)
     d.update(NS_parameters)

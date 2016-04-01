@@ -7,7 +7,7 @@ from dolfin import *
 from ..NSCoupled import *
 from ..NSCoupled import __all__
 
-def setup(u_, p_, up_, up, u, p, v, q, nu, mesh, c, ct, q_, 
+def setup(u_, p_, up_, up, u, p, v, q, nu, mesh, c, ct, q_,
           scalar_components, Schmidt, fs, **NS_namespace):
     """Set up all equations to be solved."""
     F_nonlinear = inner(dot(grad(u_), u_), v)*dx()
@@ -31,11 +31,11 @@ def setup(u_, p_, up_, up, u, p, v, q, nu, mesh, c, ct, q_,
                  + nu/Schmidt[ci]*inner(grad(q_[ci]), grad(vw))*dx \
                  - inner(fs[ci], vw)*dx \
                  - nu/Schmidt[ci]*inner(dot(grad(q_[ci]), n), vw)*ds
-        Js[ci] = derivative(Fs[ci], q_[ci], c)        
+        Js[ci] = derivative(Fs[ci], q_[ci], c)
         Ac[ci] = Matrix()
 
-    return dict(F_linear=F_linear, F_nonlinear=F_nonlinear, 
-                J_linear=J_linear, J_nonlinear=J_nonlinear, 
+    return dict(F_linear=F_linear, F_nonlinear=F_nonlinear,
+                J_linear=J_linear, J_nonlinear=J_nonlinear,
                 A_pre=A_pre, A=A, F=F, Fs=Fs, Js=Js, Ac=Ac)
 
 def scalar_assemble(ci, Ac, Js, bcs, **NS_namespace):
@@ -44,7 +44,7 @@ def scalar_assemble(ci, Ac, Js, bcs, **NS_namespace):
     for bc in bcs[ci]:
         bc.apply(Ac[ci])
 
-def scalar_solve(ci, x_, x_1, Ac, c_sol, b, omega, Fs, 
+def scalar_solve(ci, x_, x_1, Ac, c_sol, b, omega, Fs,
                  bcs, **NS_namespace):
     """Solve scalar equations."""
     x_1[ci].zero()
@@ -53,14 +53,14 @@ def scalar_solve(ci, x_, x_1, Ac, c_sol, b, omega, Fs,
     b[ci] = assemble(Fs[ci], tensor=b[ci])
     for bc in bcs[ci]:
         bc.apply(b[ci], x_[ci])
-        
+
 def NS_assemble(A, J_nonlinear, A_pre, bcs, **NS_namespace):
     A = assemble(J_nonlinear, tensor=A)
     A.axpy(1.0, A_pre, True)
     for bc in bcs["up"]:
         bc.apply(A)
-    
-def NS_solve(A, up_1, b, omega, up_, F, bcs, up_sol, 
+
+def NS_solve(A, up_1, b, omega, up_, F, bcs, up_sol,
              **NS_namespace):
     up_1.vector().zero()
     up_sol.solve(A, up_1.vector(), b["up"])

@@ -1,7 +1,4 @@
-\documentclass[a4paper,norsk]{article}
-\usepackage[latin1]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{babel,textcomp,listings, subfigure,graphicx}
+\input{preamble}
                                     
 \title{Triangle Cavity Flow}
 \author{Sebastian Gjertsen}
@@ -9,10 +6,20 @@
 \maketitle
 \begin{center}
 \section*{Introduction}
-In this study I have looked at steady 2-D incompressible flow inside a cavity driven triangle. This seemingly simple geometry gives interesting flows for different Reynolds number, and the implementation is rather easy to check with published papers. I used [Erturk and Gokcol] and [Spectral element book]  as a reference to make mesh and to look at formation of eddies. The goal will be to compare results with [Erturk and Gokcol] and [Spectral element book] , and discuss results.
+In this study I have looked at steady 2-D incompressible flow inside a cavity driven triangle. This seemingly simple geometry gives interesting flows for different Reynolds number, and the implementation is rather easy to check with published papers. I used~\cite{lamport94} and [2]  as a reference to make mesh and to look at formation of eddies. The goal will be to compare results with [1] and [2] , and discuss results. Blabla et al.\@ (2009) sadflkjaslkøfjasdølfkjasdflkøj
+
 \end{center}
-\section*{Numerics}
-I used the FEniCS software with Oasis, which solves the Navier-Stokes equations both transient and steady. I set the u(x,y) = (1,0) at the top and set no slip on the sides.
+\section*{Methods}
+\subsection*{Mesh}
+I used gmsh to make the all the meshes. The equilateral triangle I made has 3 corner points  a = (-$\sqrt{3}$, 1), b = ($\sqrt{3}$, 1),  c = (0, -2), and then I made a point between each these so i could get a finer mesh in the corners since this is where most of the interesting effects happen and also the place where the program might diverge. 73541 vertices and 145664 cells. [1] used a mesh of (512x512)/2 gridpoints giving 131072 cells.  
+
+The isoceles triangle has points a = (-1, 0), b = (1, 0), c = (0, -4) with the same idea with points on the line. 57843 vertices and 113176 cells. The mesh is also finer at the corners and super fine at the bottom as we will discuss later.
+\subsection*{Software}
+I programmed in Python, using the FEniCS software with Oasis, which solves the Navier-Stokes equations both transient and steady. 
+
+
+\section*{Numerics} \label{sec:numerics}
+This problem was solved with a steady state solver of the N-S equations. I set the velocity u(x,y) = (1,0) at the top and set no slip on the sides.
 To look at eddies forming I computed the stream function:
 $$ \nabla^2 \psi = -\omega, \hspace{4mm} \omega = \nabla \times  u $$
 where I set $\psi = 0 $ on the boundary. \newline
@@ -27,7 +34,6 @@ The streamfunction was programmed the following way:
     solve(inner(grad(p), grad(q))*dx == inner(curl(u_), q)*dx, psi,\
      bcs=[DirichletBC(Q, 0, "on_boundary")])
     sort = psi.vector().array().argsort()
-    print pa,"--",sort[0], sort[1]
     xx = interpolate(Expression("x[0]"), Q)
     yy = interpolate(Expression("x[1]"), Q)
     xm_1 = xx.vector()[sort[0]]
@@ -38,28 +44,41 @@ The streamfunction was programmed the following way:
     print "Stream function value at main-eddy: %.4f " %(psi(xm_1,ym_1))
     mycurl = project(curl(u_), Q, bcs=[DirichletBC(Q, 0, "on_boundary")])
     v_value = mycurl(xm_1,ym_1)
-    print "Vorticity value at main-eddy: %.4f "%(v_value)\end{lstlisting}
+    print "Vorticity value at main-eddy: %.4f "%(v_value)
+\end{lstlisting}
 
 
-
-\section*{Results)}
+\section*{Results}
 First I considered an equilateral Triangle with corner points: \newline
-a = (-$\sqrt{3}$, 1), b = ($\sqrt{3}$, 1),  c = (0, -2) \newline
-\begin{figure}
-    \centering
-    \includegraphics[trim = 25mm 0mm 25mm 0mm, clip, scale=0.4]{Equilateral_Re_100.png}
-    \caption{Streamfunction of equilateral triangle}
-    \label{fig:awesome_image}
+a = (-$\sqrt{3}$, 1), b = ($\sqrt{3}$, 1),  c = (0, -2) 
+
+\begin{figure}[h!]
+\centering
+\parbox{5cm}{
+\includegraphics[scale=0.4, trim = 90mm 30mm 50mm 30mm, clip]{Equilateral_Re_100.png}
+\caption{Re= 100}
+\label{fig:2figsA}}
+\qquad
+\begin{minipage}{5cm}
+\includegraphics[scale=0.4, trim = 90mm 30mm 50mm 30mm, clip]{Equilateral_Re_200.png}
+\caption{Re = 200}
+%\label{fig:2figsB}
+\end{minipage}
+\includegraphics[scale=0.4]{Equilateral_Re_1000.png}
+\caption{Re = 1000}
+\caption{Streamfunctions of equilateral triangles} 
 \end{figure}
-\newline
+
 Where the Reynolds number is defined as $Re = \frac{U}{\mu} $, where I set $U=1$ and controlled Re by changing $\mu$
-\newline
-Table~\ref{table:equilateral} looks at the position of the center eddy and the value of the streamfunction and vorticity at this point. \newline
-This study was done with 73541 vertices and 145664 cells. \newline
+
+Table~\ref{table:equilateral} looks at the position of the center eddy and the value of the streamfunction and vorticity at this point.
+
+This study was done with 73541 vertices and 145664 cells. [1] used 131072 cells. The velocity was calculated in quadratic space.
+
 We see that most of the streamfunction values, vorticity and position are similar to $10^{-2}$. As we increase Re the streamfunction value stays very similar, but the vorticity starts to become a little different but similar to $10^{-1}$. 
 The position of the main eddy is very similar to Re = 1250, and changes a bit at Re = 1500.
-\newline
-\begin{table}
+
+\begin{table}[h]
   \centering%
   \begin{tabular}{l*{6}{c}r}
    & &Erturk and Gockol & & & Me\\
@@ -75,28 +94,80 @@ The position of the main eddy is very similar to Re = 1250, and changes a bit at
   1000   & -0.2844 & -1.1629 &(0.1116, 0.1973) & -0.2814  & -1.1427 & (0.1066, 0.1944) \\
   1250   & -0.2861 & -1.1624 & (0.1049, 0.1973) & -0.2826 & -1.1382 & (0.1066, 0.1944)   \\
   1500   & -0.2872 & -1.1639 & (0.1015, 0.1914)  & -0.2834 & -1.1354  & (0.1022, 0.1828)\\
-  1750   &  -0.2881 & -1.1675 & (0.1015, 0.1914) &   &\\ 
+  1750   &  -0.2881 & -1.1675 & (0.1015, 0.1914) & -0.2839 & -1.1336  & (0.1022, 0.1828)\\ 
 \hline
 \end{tabular}
   \caption{Eddies of equilateral Triangle}\label{table:equilateral}
 \end{table}
 
+\begin{table}[h]
+  \centering%
+  \begin{tabular}{l*{2}{c}r}
+  Re &   $|\Delta \psi |$ &$|\Delta \omega |$  \\
+  \hline 
+  1   &  0.0   & $1.3*10^{-3}$\\
+  50   & $2.0\cdot10^{-4}$ &$1.9*10^{-3}$    \\
+  100  & $6.0*10^{-4}$ & $7.0*10^{-3}$ \\
+  200   & $1.1*10^{-3}$ & $5.9*10^{-3}$ \\
+  350   &  $ 1.6*10^{-3}$ &$9.8*10^{-3}$ \\
+  500   &    $2.0*10^{-3}$   & $12.5*10^{-3}$\\
+  750   &   $2.5*10^{-3}$ & $16.4*10^{-3}$\\
+  1000   &  $3.0*10^{-3}$    & $20.2*10^{-3}$ \\
+  1250   &   $3.5*10^{-3}$ & $24.2*10^{-3}$ \\
+  1500   & $3.6*10^{-3}$  &$28.5*10^{-3}$ \\
+  1750   &  $4.2*10^{-3}$ &$33.9*10^{-3}$\\ 
+\hline
+\end{tabular}
+  \caption{ Absolute difference of $ \psi $ and $ \omega $ vs Erturk and Gockol}   
+\end{table}
+
+Next i studied what happens to the position of the main eddy when we refine the mesh. I used Re = 100 and matched the results with [1] (x,y) = (0.3315, 0.3555)
+
+\begin{table}[h]
+  \centering%
+  \begin{tabular}{l*{6}{c}r}
+   Vertices & $\Delta x$ & $\Delta y$ & (x,y) = (0.3315, 0.3555)\\
+   \hline 
+   273 & 0.052 & 0.067 & (0.3837, 0.4225) \\
+   1064 & 0.070 & 0.01 &(0.4042, 0.3742)\\
+   3946 & 0.042 & 0.008 & (0.3728, 0.3641)\\
+   15134 & 0.0019 & 0.007 & (0.3515, 0.3633)\\
+   59217 & 0.006 & 0.003 & (0.3375, 0.3594)\\
+	\hline
+ \end{tabular}
+  \caption{Refinement study with Re = 100}
+  \label{table:second eddy}
+\end{table}
 
 Next I considered an Isoceles Triangle with corner points: \newline
 a = (-1, 0), b = (1, 0) ,c = (0, -4), with 64051 vertices and 126444 cells\newline
 Again I looked at the position of the main eddy in Table~\ref{table:isoceles_triangle}.
-\newline
-\begin{figure}
+Mesh:
+
+\begin{figure}[h]
     \centering
-    \includegraphics[trim = 100mm 0mm 100mm 0mm, clip, scale=0.4]{isoceles_Re_100.png}
-    \caption{Streamfunction of isoceles triangle, Re = 100}
-     \includegraphics[trim = 100mm 0mm 100mm 0mm, clip, scale=0.4]{isoceles_Re_200.png}
-     \caption{Streamfunction of isoceles triangle, Re = 200}
-    \label{fig:awesome_image}
+    \includegraphics[trim = 30mm 50mm 30mm 10mm, clip, scale=0.6]{mesh_isoceles_pic.pdf}
+    \caption{Mesh of isoceles triangle}
+    \label{fig:yo}
 \end{figure}
 
 
-\begin{table}
+\begin{figure}
+\centering
+\parbox{5cm}{
+\includegraphics[scale=0.4, trim = 80mm 10mm 80mm 10mm, clip]{isoceles_Re_100.png}
+\caption{Re= 100}
+\label{fig:2figsA}}
+\qquad
+\begin{minipage}{5cm}
+\includegraphics[scale= 0.4, trim = 80mm 10mm 80mm 10mm, clip]{isoceles_Re_200.png}
+\caption{Re = 200}
+\label{fig:2figsB}
+\end{minipage}
+\caption{Streamfunctions of isoceles triangles} 
+\end{figure}
+
+\begin{table}[h]
   \centering%
   \begin{tabular}{l*{6}{c}r}
    & Erturk and Gockol & Me\\
@@ -112,8 +183,8 @@ Again I looked at the position of the main eddy in Table~\ref{table:isoceles_tri
 \end{table}
 
 The next thing i looked at was where the second eddy was. This eddy is spinning the opposite direction so i had to look for the highest value of the stream function:
-\newline
-\begin{table}
+
+\begin{table}[h]
   \centering%
   \begin{tabular}{l*{6}{c}r}
    & Me\\
@@ -126,27 +197,63 @@ The next thing i looked at was where the second eddy was. This eddy is spinning 
  \end{tabular}
   \caption{Position of second eddy,isoceles }\label{table:second eddy}
 \end{table}
-\newline
-As we see in figure 2 and 3 the second eddy moved up and to the left, which correlates with table 3.
-\newline
 
-The next thing i looked at was how many eddies i could find. According to [Spectral] every eddy formed will be 406 times weaker then the previous. So the velocities and the very bottom eddies will be very small. To find these eddies I looked at the absolute velocities in the horizontal direction on a line straight through the mesh from the top at (0.0) to (0,-4). As we can see when the plot has a dip is where the velocities have changed direction and where we can find the eddies center. I used a very fine mesh at the bottom to catch as many eddies as a could. After a careful count, i got 9 eddies. This was done with Re=1, and with a mesh consisting of 57843 vertices and 113176 cells.\newline
-We can see that near the bottom we get disturbances when the eddies becomes to small for the mesh. One could argue that with a fine enough mesh the number of eddies would go to infinity.
-\newline
-If we compare to [Spectral] in figure 5, where they have used a reynolds number of 0 (Stokes flow), we see that we get very similar results.
-\begin{figure}
+As we see in figure 2 and 3 the second eddy moved up and to the left, which correlates with table 3.
+
+The next thing i looked at was how many eddies i could find. According to [2] every eddy formed will be 406 times weaker then the previous. So the velocities and the very bottom eddies will be very small. To find these eddies I looked at the absolute velocities in the horizontal direction on a line straight through the mesh from the top at (0.0) to (0,-4). As we can see when the plot has a dip is where the velocities have changed direction and where we can find the eddies center. I used a very fine mesh at the bottom to catch as many eddies as a could. After a careful count, i got 9 eddies. This was done with Re=1, and with a mesh consisting of 57843 vertices and 113176 cells.
+
+We can see that near the bottom we get disturbances.  As we see in Figure \ref{fig:2figsB} and ? that the mesh if very fine near the bottom corner. So the disturbances is probably caused by the fact that the computer can only represent numbers down to $10^{-17}$ [Ref].  One could argue that with a fine enough mesh and a computer able to represent infinitesimal numbers, that the number of eddies would go to infinity as we go down in the mesh.
+
+If we compare to [2] in figure 5, where they have used a reynolds number of 0 (Stokes flow), we see that we get very similar results.
+
+
+\begin{figure}[h]
     \centering
-    \includegraphics[trim = 0mm 0mm 0mm 0mm, clip, scale=0.4]{eddy_plot_1.png}
-    \caption{Absolute transverse velocity along the centre line}
-    \includegraphics[trim = 0mm 0mm 0mm 0mm, clip, scale=0.4]{eddy_plot_2.png}
-    \caption{Absolute transverse velocity along lower part of the centre line}
-    \includegraphics[trim = 50mm 10mm 10mm 70mm, clip, scale=0.4]{Spectral_eddy_plot.png}
-    \caption{Absolute transverse velocity, from [Spectral book]}
+    \includegraphics[trim = 50mm 20mm 0mm 20mm, clip, scale=0.5]{Eddy_plot_all.jpeg}
+    \caption{Absolute transverse velocity, my study and }
     \label{fig:awesome_image}
 \end{figure}
-\newline
+
+Representere tall i python, i pcen. ish 10e-18 eln.
+Sjekke mat-inf komenpdiet 
+Mulig at vi kan bestemme "steppet"
+metode - lage meshet. steg for steg
+POWERPOINT lage figurer, export i pdf
+letter å lese tables
+
+større diff med høyere Re . evnt
+
+forfining av mesh med ett Re, med diff etc
+
+diskutere mesh fra tidligere studier
+
+vise hvor fint meshet er nederst. 
 
 
+- Skru på krylov løser for ett reynolds tall 
+
+- Gå fra LU løser til Krylov 
+
+- Bilde av høyere reynoldstall -- check
+
+-  linear vs kvadratisk element  -- 
+
+- bilde av mesh ved siden av hverandre
+
+\bibliographystyle{vancouver}
+\bibliography{bibliography}
+
+
+%\begin{thebibliography}{9}
+
+%\bibitem{lamport94}
+ % Ercan Erturk and Orhan Gokcol,
+%  \emph{Fine Grid Numerical Solutions of Triangular Cavity Flow},
+ % The European Physical Journal - Applied Physics
+%  2007.
+%\bibitem{Erdos01} P. Erd\H os, \emph{Spectral hp Element Methods for CFD(Second Edition)}, Karniadakis, Sherwin, Oxford science publications, Oxford, 2005, pp. 11.
+
+%\end{thebibliography}
 
 
 

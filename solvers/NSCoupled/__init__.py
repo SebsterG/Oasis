@@ -7,16 +7,15 @@ from dolfin import *
 from solvers import *
 
 """Define all functions required by coupled solver."""
-__all__ = ["NS_assemble", "NS_solve", "scalar_assemble", 
-           "scalar_solve", "get_solvers", "setup", 
-           "print_velocity_pressure_info", 
+__all__ = ["NS_assemble", "NS_solve", "scalar_assemble",
+           "scalar_solve", "get_solvers", "setup",
+           "print_velocity_pressure_info",
            "elements"]
-
 elements = {
     "TaylorHood":
         dict(family={"u": "CG", "p": "CG"},
              degree = {"u": 2, "p": 1},
-             bubble = False),
+             bubble = False) ,
     "MINI":
         dict(family={"u": "CG", "p": "CG"},
              degree = {"u": 1, "p": 1},
@@ -24,29 +23,29 @@ elements = {
     "CR":
         dict(family={"u": "CR", "p": "DG"},
              degree = {"u": 1, "p": 0},
-             bubble = False)    
+             bubble = False)
       }
 
 def NS_assemble(**NS_namespace):
     pass
-    
+
 def NS_solve(**NS_namespace):
     pass
 
 def get_solvers(**NS_namespace):
-    """Return 2 linear solvers. 
-    
+    """Return 2 linear solvers.
+
     We are solving for
        velocity/pressure
-       
-       and possibly:       
+
+       and possibly:
        - scalars
-            
-    """    
+
+    """
     up_sol, c_sol = LUSolver("umfpack"), LUSolver("umfpack")
     up_sol.parameters["same_nonzero_pattern"] = True
-    c_sol .parameters["same_nonzero_pattern"] = True    
+    c_sol .parameters["same_nonzero_pattern"] = True
     return up_sol, c_sol
 
-def print_velocity_pressure_info(iter, error, **NS_namespace): 
+def print_velocity_pressure_info(iter, error, **NS_namespace):
     print "Iter {}, Error = {}".format(iter+1, error)
