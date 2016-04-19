@@ -12,9 +12,9 @@ def near(x, y, tol=1e-12):
     return bool(abs(x-y) < tol)
 
 class PeriodicDomain(SubDomain):
-    
+
     def inside(self, x, on_boundary):
-        return bool((near(x[0], -pi) or near(x[1], -pi) or near(x[2], -pi)) and 
+        return bool((near(x[0], -pi) or near(x[1], -pi) or near(x[2], -pi)) and
                 (not (near(x[0], pi) or near(x[1], pi) or near(x[2], pi))) and on_boundary)
 
     def map(self, x, y):
@@ -27,23 +27,23 @@ class PeriodicDomain(SubDomain):
             y[1] = x[1] - 2.0*pi
             y[2] = x[2]
         elif near(x[1], pi) and near(x[2], pi):
-            y[0] = x[0] 
+            y[0] = x[0]
             y[1] = x[1] - 2.0*pi
             y[2] = x[2] - 2.0*pi
         elif near(x[1], pi):
-            y[0] = x[0] 
+            y[0] = x[0]
             y[1] = x[1] - 2.0*pi
             y[2] = x[2]
         elif near(x[0], pi) and near(x[2], pi):
             y[0] = x[0] - 2.0*pi
-            y[1] = x[1] 
+            y[1] = x[1]
             y[2] = x[2] - 2.0*pi
         elif near(x[0], pi):
             y[0] = x[0] - 2.0*pi
-            y[1] = x[1] 
-            y[2] = x[2]            
+            y[1] = x[1]
+            y[2] = x[2]
         else: # near(x[2], pi):
-            y[0] = x[0] 
+            y[0] = x[0]
             y[1] = x[1]
             y[2] = x[2] - 2.0*pi
 
@@ -51,19 +51,19 @@ constrained_domain = PeriodicDomain()
 
 # Override some problem specific parameters
 recursive_update(NS_parameters, dict(
-    nu = 0.005,
-    T = 0.2,
-    dt = 0.01,
-    Nx = 33,
-    Ny = 33, 
-    Nz = 33,
+    nu = 0.1,
+    T = 2.0,
+    dt = 0.1,
+    Nx = 10,
+    Ny = 10,
+    Nz = 10,
     folder = "taylorgreen3D_results",
     max_iter = 1,
     velocity_degree = 1,
-    save_step = 10000,
-    checkpoint = 10000, 
+    save_step = 10,
+    checkpoint = 10,
     plot_interval = 10,
-    print_dkdt_info = 10000,
+    print_dkdt_info = 10,
     use_krylov_solvers = True,
     krylov_solvers = dict(monitor_convergence=True)
   )
@@ -74,7 +74,7 @@ initial_fields = dict(
         u1='-cos(x[0])*sin(x[1])*cos(x[2])',
         u2='0',
         p='1./16.*(cos(2*x[0])+cos(2*x[1]))*(cos(2*x[2])+2)')
-    
+
 def initialize(q_, q_1, q_2, VV, initial_fields, OasisFunction, **NS_namespace):
     for ui in q_:
         vv = OasisFunction(Expression((initial_fields[ui])), VV[ui])
@@ -85,7 +85,7 @@ def initialize(q_, q_1, q_2, VV, initial_fields, OasisFunction, **NS_namespace):
             q_2[ui].vector()[:] = q_[ui].vector()[:]
 
 kin = zeros(1)
-def temporal_hook(u_, p_, tstep, plot_interval, print_dkdt_info, nu, 
+def temporal_hook(u_, p_, tstep, plot_interval, print_dkdt_info, nu,
                   dt, t, oasis_memory, **NS_namespace):
     oasis_memory("tmp", True)
     if (tstep % print_dkdt_info == 0 or
@@ -94,7 +94,7 @@ def temporal_hook(u_, p_, tstep, plot_interval, print_dkdt_info, nu,
         if tstep % print_dkdt_info == 0:
             kin[0] = kinetic
             dissipation = assemble(nu*inner(grad(u_), grad(u_))*dx) / (2*pi)**3
-            info_blue("Kinetic energy = {} at time = {}".format(kinetic, t)) 
+            info_blue("Kinetic energy = {} at time = {}".format(kinetic, t))
             info_blue("Energy dissipation rate = {}".format(dissipation))
         else:
             info_blue("dk/dt = {} at time = {}".format((kinetic-kin[0])/dt, t))

@@ -17,7 +17,7 @@ if restart_folder:
     NS_parameters.update(cPickle.load(f))
     NS_parameters['restart_folder'] = restart_folder
     globals().update(NS_parameters)
-    
+
 else:
 
     # Override some problem specific parameters
@@ -25,7 +25,7 @@ else:
         T  = 5.0,
         dt = 0.05,
         checkpoint = 1000,
-        save_step = 5000, 
+        save_step = 5000,
         plot_interval = 10,
         velocity_degree = 2,
         print_intermediate_info = 100,
@@ -40,7 +40,7 @@ def create_bcs(V, Q, Um, H, **NS_namespace):
     ux = Expression("0.00*x[1]")
     uy = Expression("-0.00*(x[0]-{})".format(center))
     bc00 = DirichletBC(V, inlet, Inlet)
-    bc01 = DirichletBC(V, 0, Inlet)    
+    bc01 = DirichletBC(V, 0, Inlet)
     bc10 = DirichletBC(V, ux, Cyl)
     bc11 = DirichletBC(V, uy, Cyl)
     bc2 = DirichletBC(V, 0, Wall)
@@ -54,7 +54,7 @@ def create_bcs(V, Q, Um, H, **NS_namespace):
 def initialize(x_1, x_2, bcs, **NS_namespace):
     for ui in x_1:
         [bc.apply(x_1[ui]) for bc in bcs[ui]]
-    for ui in x_2:    
+    for ui in x_2:
         [bc.apply(x_2[ui]) for bc in bcs[ui]]
 
 def pre_solve_hook(mesh, V, newfolder, tstepfiles, tstep, ds, u_,
@@ -70,27 +70,27 @@ def pre_solve_hook(mesh, V, newfolder, tstepfiles, tstep, ds, u_,
 
     return dict(uv=uv, omega=omega, ds=ds, ff=ff, n=n)
 
-def temporal_hook(q_, u_, tstep, V, uv, p_, plot_interval, omega, ds, 
+def temporal_hook(q_, u_, tstep, V, uv, p_, plot_interval, omega, ds,
                   save_step, mesh, nu, Umean, D, n, **NS_namespace):
     if tstep % plot_interval == 0:
         uv()
         plot(uv, title='Velocity')
         plot(p_, title='Pressure')
         plot(q_['alfa'], title='alfa')
-        
+
     R = VectorFunctionSpace(mesh, 'R', 0)
     c = TestFunction(R)
     tau = -p_*Identity(2)+nu*(grad(u_)+grad(u_).T)
     forces = assemble(dot(dot(tau, n), c)*ds(1)).array()*2/Umean**2/D
-    
+
     print "Cd = {}, CL = {}".format(*forces)
-        
+
     if tstep % save_step == 0:
         try:
             from fenicstools import StreamFunction
             omega.assign(StreamFunction(u_, []))
         except:
-            omega.assign(project(curl(u_), V, 
+            omega.assign(project(curl(u_), V,
                          bcs=[DirichletBC(V, 0, DomainBoundary())]))
 
 def theend_hook(q_, u_, p_, uv, mesh, ds, V, nu, Umean, D, **NS_namespace):
@@ -105,8 +105,8 @@ def theend_hook(q_, u_, p_, uv, mesh, ds, V, nu, Umean, D, **NS_namespace):
     Cyl.mark(ff, 1)
     n = FacetNormal(mesh)
     ds = ds[ff]
-    forces = assemble(dot(dot(tau, n), c)*ds(1)).array()*2/Umean**2/D
-    
+    forces = assemble(dot(dot(tau, n), c)*ds(1)).array()*2/(Umean**2*D)
+
     print "Cd = {}, CL = {}".format(*forces)
 
     from fenicstools import Probes

@@ -8,8 +8,8 @@ mesh = Mesh("Triangle_corner_nice.xml")
 #plot(mesh) ;interactive()
 
 NS_parameters.update(
-    omega = .9,
-	nu = 1.0/200.0,
+    omega = 1.0,
+	nu = 1.0/1.0,
     max_error = 1e-13,
     max_iter = 1000,
     plot_interval = 10,
