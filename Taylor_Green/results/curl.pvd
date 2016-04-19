@@ -2,5 +2,13 @@
 <VTKFile type="Collection" version="0.1">
   <Collection>
     <DataSet timestep="0" part="0" file="curl000000.vtu" />
+    <DataSet timestep="1" part="0" file="curl000001.vtu" />
+    <DataSet timestep="2" part="0" file="curl000002.vtu" />
+    <DataSet timestep="3" part="0" file="curl000003.vtu" />
+    <DataSet timestep="4" part="0" file="curl000004.vtu" />
+    <DataSet timestep="5" part="0" file="curl000005.vtu" />
+    <DataSet timestep="6" part="0" file="curl000006.vtu" />
+    <DataSet timestep="7" part="0" file="curl000007.vtu" />
+    <DataSet timestep="8" part="0" file="curl000008.vtu" />
   </Collection>
 </VTKFile>

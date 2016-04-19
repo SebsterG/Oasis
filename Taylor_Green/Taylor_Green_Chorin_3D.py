@@ -1,11 +1,12 @@
 from dolfin import *
 import matplotlib.pyplot as plt
 import time
+import numpy as np
 set_log_active(False)
 start_time = time.time()
 
 N = 10
-mesh = BoxMesh(Point(-pi, -pi, -pi), Point(pi, pi, pi), N, N, 10)
+mesh = BoxMesh(Point(-pi, -pi, -pi), Point(pi, pi, pi), N, N, N)
 #plot(mesh,interactive=True)
 
 class PeriodicBoundary(SubDomain):
@@ -87,9 +88,9 @@ a3 = inner(u,v)*dx
 L3 = inner(u1,v)*dx - k*inner(grad(p1),v)*dx
 
 
-ufile = File("results/velocity.pvd")
-pfile = File("results/pressure.pvd")
-curlfile = File("results/curl.pvd")
+#ufile = File("results/velocity.pvd")
+#pfile = File("results/pressure.pvd")
+#curlfile = File("results/curl.pvd")
 
 T = 20.0
 t = dt
@@ -108,25 +109,26 @@ while t < T + DOLFIN_EPS:
 
     u0.assign(u1)
     print "Timestep: ", t
-    if (counter%10==0 or counter%10 == 1):
+    if (counter%100==0 or counter%100 == 1):
         kinetic_e = assemble(0.5*dot(u1,u1)*dx)/(2*pi)**3
-        if (counter%10)==0:
+        if (counter%100)==0:
             kinetic_hold = kinetic_e
-        if (counter%10)==1:
+        if (counter%100)==1:
             dKdt.append((kinetic_e - kinetic_hold)/dt)
             print "kinetic energy: ",kinetic_e
             dissipation_e = assemble(nu*inner(grad(u1), grad(u1))*dx) / (2*pi)**3
             print "dissipation: ", dissipation_e
             #plot(u1,rescale=False)
-    	    ufile << u1
-    	    pfile << p1
-            curl_ = curl(u1)
-            curlfile << project(curl_[2],Q) #project(curl(u1),V)
+    	    #ufile << u1
+    	    #pfile << p1
+            #curl_ = curl(u1)
+            #curlfile << project(curl_[2],Q) #project(curl(u1),V)
 
     #plot(p1,rescale=True)
     counter+=1
     t += dt
 
 print("--- %s seconds ---" % (time.time() - start_time))
-plt.plot(dKdt)
-plt.show()
+#plt.plot(dKdt)
+#plt.show()
+np.savetxt('dKdt.txt', dKdt, delimiter=',')
