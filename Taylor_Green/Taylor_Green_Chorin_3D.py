@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 set_log_active(False)
+set_log_level(PROGRESS)
 start_time = time.time()
 
-N = 10
+N = 23
 mesh = BoxMesh(Point(-pi, -pi, -pi), Point(pi, pi, pi), N, N, N)
 #plot(mesh,interactive=True)
 
@@ -90,40 +91,49 @@ L3 = inner(u1,v)*dx - k*inner(grad(p1),v)*dx
 
 #ufile = File("results/velocity.pvd")
 #pfile = File("results/pressure.pvd")
-#curlfile = File("results/curl.pvd")
+#curlfile = File("results/curl.vtu")
 
 T = 20.0
 t = dt
 counter = 0
 dKdt = []
+time_array = []
 while t < T + DOLFIN_EPS:
     # Update pressure boundary condition
-    solve(a1==L1,u1,bcs)
+    solve(a1==L1,u1,bcs,solver_parameters={"linear_solver": "gmres"})
 
     #pressure correction
-    solve(a2==L2,p1,bcp)
+    solve(a2==L2,p1,bcp,solver_parameters={"linear_solver":"gmres"})
     #print norm(p1)
 
     #last step
-    solve(a3==L3,u1,bcs)
+    solve(a3==L3,u1,bcs,solver_parameters={"linear_solver":"gmres"})
 
     u0.assign(u1)
+    print MPI.rank(mpi_comm_world()) 
+  
+
     print "Timestep: ", t
     if (counter%100==0 or counter%100 == 1):
         kinetic_e = assemble(0.5*dot(u1,u1)*dx)/(2*pi)**3
         if (counter%100)==0:
             kinetic_hold = kinetic_e
-        if (counter%100)==1:
-            dKdt.append((kinetic_e - kinetic_hold)/dt)
-            print "kinetic energy: ",kinetic_e
             dissipation_e = assemble(nu*inner(grad(u1), grad(u1))*dx) / (2*pi)**3
-            print "dissipation: ", dissipation_e
-            #plot(u1,rescale=False)
+	    print "dissipation: ", dissipation_e	
+	    print "kinetic energy", kinetic_e	
+	else: # (counter%100)==1:
+            if MPI.rank(mpi_comm_world())==0:
+	        dKdt.append((kinetic_e - kinetic_hold)/dt)
+                time_array.append(t)
+		#curl_ = curl(u1)
+            	#curlfile << interpolate(curl_[2],Q)
+		#np.savetxt('time.txt', time_array, delimiter=',')
+
+	    #plot(u1,rescale=False)
     	    #ufile << u1
     	    #pfile << p1
             #curl_ = curl(u1)
             #curlfile << project(curl_[2],Q) #project(curl(u1),V)
-
     #plot(p1,rescale=True)
     counter+=1
     t += dt
@@ -131,4 +141,7 @@ while t < T + DOLFIN_EPS:
 print("--- %s seconds ---" % (time.time() - start_time))
 #plt.plot(dKdt)
 #plt.show()
-np.savetxt('dKdt.txt', dKdt, delimiter=',')
+if MPI.rank(mpi_comm_world()) == 0:
+    np.savetxt('dKdt.txt', dKdt, delimiter=',')
+    np.savetxt('time.txt', time_array, delimiter=',')
+
